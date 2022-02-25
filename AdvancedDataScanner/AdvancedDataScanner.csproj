@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <ApplicationManifest>AdvancedDataScanner.manifest</ApplicationManifest>
+    <ApplicationIcon>ico.ico</ApplicationIcon>
+    <SignAssembly>False</SignAssembly>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Company>Private Contributor</Company>
+    <Authors>Rick Voß</Authors>
+    <Product>$(AssemblyName) V1.0.0</Product>
+    <Description>Scann specifik folder Paths and all its under Folders, aply searches, filters and get
+precice file infos</Description>
+    <PackageIcon>ico.png</PackageIcon>
+    <PackageReadmeFile>info.md</PackageReadmeFile>
+    <PackageTags>Folders; Files; Scann; Search</PackageTags>
+    <NeutralLanguage>en</NeutralLanguage>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
+    <PackageLicenseExpression>0BSD</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="ico.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="info.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
