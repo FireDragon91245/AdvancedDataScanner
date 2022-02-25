@@ -12,17 +12,27 @@
     <Product>$(AssemblyName) V1.0.0</Product>
     <Description>Scann specifik folder Paths and all its under Folders, aply searches, filters and get
 precice file infos</Description>
-    <PackageIcon>package_icon.png</PackageIcon>
+    <PackageIcon>pack_icon.png</PackageIcon>
     <PackageTags>Folders; Files; Scann; Search</PackageTags>
     <NeutralLanguage>en</NeutralLanguage>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <FileVersion>1.0.0</FileVersion>
     <PackageLicenseExpression>0BSD</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/FireDragon91245/AdvancedDataScanner</RepositoryUrl>
+    <PackageReleaseNotes>1. Version Stabel</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
     <Content Include="app_icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="pack_icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
