@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Newtonsoft.Json;
 
 namespace AdvancedDataScanner
 {
@@ -442,6 +443,25 @@ namespace AdvancedDataScanner
                         ThreadPool.QueueUserWorkItem(cal => save.Save_all(scannID));
                     }
                 }
+            }
+            else if (arg.StartsWith("store"))
+            {
+                string[] args = arg.Split(" ");
+                if (args.Length >= 3)
+                {
+
+                    if (int.TryParse(args[1], out int scannID))
+                    {
+                        if (args[2].Length > 0)
+                        {
+                            Console.WriteLine("Startet to save as JSON for future usage!");
+                            ThreadPool.QueueUserWorkItem(cal => save.StorToFile(scannID, args[2]));
+                        }
+                    }
+                }
+            }
+            else if (arg.StartsWith("listStore"))
+            {
             }
         }
     }

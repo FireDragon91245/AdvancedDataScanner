@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -267,6 +268,27 @@ namespace AdvancedDataScanner
                 }
             }
             Console.WriteLine("Save All for id: " + scannID + " finished, saved at file path: " + new FileInfo(fileName).FullName);
+        }
+
+        public void StorToFile (int scannID, string fileName)
+        {
+            if (!Directory.Exists("./stor"))
+            {
+                Directory.CreateDirectory("./stor");
+            }
+            string FilePathData = $"./stor/{fileName.Replace(" ", "-").Replace(".", "_")}_{DateTime.Now.ToString().Replace(".", "-").Replace(" ", "-").Replace(":", "-")}_data.json";
+            string FilePathStat = $"./stor/{fileName.Replace(" ", "-").Replace(".", "_")}_{DateTime.Now.ToString().Replace(".", "-").Replace(" ", "-").Replace(":", "-")}_stat.json";
+            File.WriteAllText(FilePathData, "");
+            File.WriteAllText(FilePathStat, "");
+            using (StreamWriter writer = new StreamWriter(FilePathData))
+            {
+                writer.Write(JsonConvert.SerializeObject(Program.datas[scannID].stor.datein, Formatting.Indented));
+            }
+            using (StreamWriter writer = new StreamWriter(FilePathStat))
+            {
+                writer.Write(JsonConvert.SerializeObject(Program.datas[scannID].stor.stats, Formatting.Indented));
+            }
+            Console.WriteLine($"Finished saveing to JSON for id {scannID}.");
         }
     }
 }

@@ -16,10 +16,10 @@ namespace AdvancedDataScanner
                 {
                     if (!new FileInfo(Program.datas[scannID].stor.datein[key][value]).Name[key.Length..].Contains(searchName))
                     {
-                        Program.datas[scannID].stor.datein[key].Remove(value);
+                        Program.datas[scannID].stor.datein[key].Remove(value, out _);
                     }
                 }
-                if (Program.datas[scannID].stor.datein[key].Count < 1) Program.datas[scannID].stor.datein.Remove(key);
+                if (Program.datas[scannID].stor.datein[key].Count < 1) Program.datas[scannID].stor.datein.Remove(key, out _);
             }
             ReCount(scannID);
             Console.WriteLine("Serch in scann: " + scannID + " finished");
@@ -34,10 +34,10 @@ namespace AdvancedDataScanner
                 {
                     if (!Program.datas[scannID].stor.datein[key][value].Contains(searchPath))
                     {
-                        Program.datas[scannID].stor.datein[key].Remove(value);
+                        Program.datas[scannID].stor.datein[key].Remove(value, out _);
                     }
                 }
-                if (Program.datas[scannID].stor.datein[key].Count < 1) Program.datas[scannID].stor.datein.Remove(key);
+                if (Program.datas[scannID].stor.datein[key].Count < 1) Program.datas[scannID].stor.datein.Remove(key, out _);
             }
             ReCount(scannID);
             Console.WriteLine("Serch in scann: " + scannID + " finished");
@@ -52,10 +52,10 @@ namespace AdvancedDataScanner
                 {
                     if (!new FileInfo(Program.datas[scannID].stor.datein[key][value]).Extension.Equals(searchExtension, StringComparison.OrdinalIgnoreCase))
                     {
-                        Program.datas[scannID].stor.datein[key].Remove(value);
+                        Program.datas[scannID].stor.datein[key].Remove(value, out _);
                     }
                 }
-                if (Program.datas[scannID].stor.datein[key].Count < 1) Program.datas[scannID].stor.datein.Remove(key);
+                if (Program.datas[scannID].stor.datein[key].Count < 1) Program.datas[scannID].stor.datein.Remove(key, out _);
             }
             ReCount(scannID);
             Console.WriteLine("Serch in scann: " + scannID + " finished");
@@ -70,10 +70,10 @@ namespace AdvancedDataScanner
                 {
                     if (!(new FileInfo(Program.datas[scannID].stor.datein[key][value]).Length >= searchMinSize))
                     {
-                        Program.datas[scannID].stor.datein[key].Remove(value);
+                        Program.datas[scannID].stor.datein[key].Remove(value, out _);
                     }
                 }
-                if (Program.datas[scannID].stor.datein[key].Count < 1) Program.datas[scannID].stor.datein.Remove(key);
+                if (Program.datas[scannID].stor.datein[key].Count < 1) Program.datas[scannID].stor.datein.Remove(key, out _);
             }
             ReCount(scannID);
             Console.WriteLine("Serch in scann: " + scannID + " finished");
@@ -88,10 +88,10 @@ namespace AdvancedDataScanner
                 {
                     if (!(new FileInfo(Program.datas[scannID].stor.datein[key][value]).Length <= searchMaxSize))
                     {
-                        Program.datas[scannID].stor.datein[key].Remove(value);
+                        Program.datas[scannID].stor.datein[key].Remove(value, out _);
                     }
                 }
-                if (Program.datas[scannID].stor.datein[key].Count < 1) Program.datas[scannID].stor.datein.Remove(key);
+                if (Program.datas[scannID].stor.datein[key].Count < 1) Program.datas[scannID].stor.datein.Remove(key, out _);
             }
             ReCount(scannID);
             Console.WriteLine("Serch in scann: " + scannID + " finished");
