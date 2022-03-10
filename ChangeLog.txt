@@ -1,0 +1,6 @@
+V1.0.0
+- First Realese with features listet in Readmy.md (Probber ChangeLog Begins with the next Version V1.0.1)
+V1.0.1
+- Made Data Structure Thread Safe
+- Added Newtensoft.JSON
+- Added JSON saving to drive
