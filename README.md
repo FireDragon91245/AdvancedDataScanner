@@ -21,5 +21,6 @@ V1.0.0 Feature Aditions:
 - copy        > copy a scann
 - recount     > recount the files that are collectet by the scann
 - save        > save results of a scann in diferent detail to a text file
+
 V1.0.1 Feature Aditions:
 - Update comming probebly betwen 11.03.22 and 13.03.22
