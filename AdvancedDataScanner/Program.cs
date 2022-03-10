@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,13 +10,13 @@ namespace AdvancedDataScanner
     public class Program
     {
         //Main Scann Variables Containing every information
-        static public Dictionary<int, Scanner> scans = new Dictionary<int, Scanner>();
-        static public Dictionary<int, DataStruct> datas = new Dictionary<int, DataStruct>();
+        static public ConcurrentDictionary<int, Scanner> scans = new ConcurrentDictionary<int, Scanner>();
+        static public ConcurrentDictionary<int, DataStruct> datas = new ConcurrentDictionary<int, DataStruct>();
         static public Save save = new Save();
 
         static private int lastID = 0;
         static private Boolean exit = false;
-        public static readonly Dictionary<int, Names> names = new Dictionary<int, Names>();
+        public static readonly ConcurrentDictionary<int, Names> names = new ConcurrentDictionary<int, Names>();
         private static readonly Search Search = new Search();
 
         static private void Main ()
@@ -37,9 +38,9 @@ namespace AdvancedDataScanner
                     {
                         lastID++;
                         //Create a new instance of every object
-                        scans.Add(lastID, new Scanner());
-                        datas.Add(lastID, new DataStruct());
-                        names.Add(lastID, new Names());
+                        scans.TryAdd(lastID, new Scanner());
+                        datas.TryAdd(lastID, new DataStruct());
+                        names.TryAdd(lastID, new Names());
 
                         //init Stuff
                         datas[lastID].InitStruct();
@@ -64,9 +65,9 @@ namespace AdvancedDataScanner
                     {
                         lastID++;
                         //Create a new instance of every object
-                        scans.Add(lastID, new Scanner());
-                        datas.Add(lastID, new DataStruct());
-                        names.Add(lastID, new Names());
+                        scans.TryAdd(lastID, new Scanner());
+                        datas.TryAdd(lastID, new DataStruct());
+                        names.TryAdd(lastID, new Names());
 
                         //init Stuff
                         datas[lastID].InitStruct();
@@ -246,9 +247,9 @@ namespace AdvancedDataScanner
                         {
 
                             long memBefore = GC.GetTotalMemory(true);
-                            scans.Remove(selID);
-                            names.Remove(selID);
-                            datas.Remove(selID);
+                            scans.Remove(selID, out _);
+                            names.Remove(selID, out _);
+                            datas.Remove(selID, out _);
                             long memAfter = GC.GetTotalMemory(true);
                             Console.WriteLine("=> id " + selID + " was terminated and " + ( memBefore - memAfter ) + " bytes of Memory was safed");
                         }
@@ -263,15 +264,15 @@ namespace AdvancedDataScanner
             {
                 foreach (int key in datas.Keys)
                 {
-                    datas.Remove(key);
+                    datas.Remove(key, out _);
                 }
                 foreach (int key in names.Keys)
                 {
-                    names.Remove(key);
+                    names.Remove(key, out _);
                 }
                 foreach (int key in scans.Keys)
                 {
-                    scans.Remove(key);
+                    scans.Remove(key, out _);
                 }
                 exit = true;
                 Environment.Exit(0);
@@ -362,8 +363,8 @@ namespace AdvancedDataScanner
                         if (datas.ContainsKey(scannID))
                         {
                             lastID++;
-                            datas.Add(lastID, new DataStruct());
-                            names.Add(lastID, new Names());
+                            datas.TryAdd(lastID, new DataStruct());
+                            names.TryAdd(lastID, new Names());
                             datas[lastID].InitStruct();
                             foreach (String key in datas[scannID].stor.datein.Keys)
                             {
@@ -401,15 +402,15 @@ namespace AdvancedDataScanner
             {
                 foreach (int key in datas.Keys)
                 {
-                    datas.Remove(key);
+                    datas.Remove(key, out _);
                 }
                 foreach (int key in names.Keys)
                 {
-                    names.Remove(key);
+                    names.Remove(key, out _);
                 }
                 foreach (int key in scans.Keys)
                 {
-                    scans.Remove(key);
+                    scans.Remove(key, out _);
                 }
                 Environment.Exit(0);
             }

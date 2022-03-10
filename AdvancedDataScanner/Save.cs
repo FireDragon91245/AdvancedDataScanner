@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security;
-using System.Text;
 
 namespace AdvancedDataScanner
 {
     public class Save
     {
-        public void  Save_minimal (int scannID)
+        public void Save_minimal (int scannID)
         {
             String fileName = "./save_minimal_" + DateTime.Now.ToString().Replace(" ", "_").Replace(".", "-").Replace(":", "-") + ".txt";
             File.Create(fileName).Close();

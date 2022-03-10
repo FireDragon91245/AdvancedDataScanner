@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace AdvancedDataScanner
 {
@@ -66,7 +65,7 @@ namespace AdvancedDataScanner
             Console.WriteLine("Scann with id " + thisScannID + " finsihed scanning");
             Program.names[thisScannID].Status = "Status: Finished";
             Program.datas[thisScannID].stor.end = DateTime.Now;
-            Program.scans.Remove(thisScannID);
+            Program.scans.Remove(thisScannID, out _);
         }
 
         public void RunScannFast ()
@@ -110,7 +109,7 @@ namespace AdvancedDataScanner
             Console.WriteLine("Scann with id " + thisScannID + " finsihed scanning");
             Program.names[thisScannID].Status = "Status: Finished";
             Program.datas[thisScannID].stor.end = DateTime.Now;
-            Program.scans.Remove(thisScannID);
+            Program.scans.Remove(thisScannID, out _);
         }
     }
 }

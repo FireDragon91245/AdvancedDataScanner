@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace AdvancedDataScanner
 {
     //Main Data Structure
     public struct Data
     {
-        public Dictionary<String, Dictionary<int, String>> datein;
+        public ConcurrentDictionary<String, ConcurrentDictionary<int, String>> datein;
 
-        public Dictionary<String, Int64> stats;
+        public ConcurrentDictionary<String, Int64> stats;
 
         public DateTime start;
         public DateTime end;
@@ -23,9 +23,9 @@ namespace AdvancedDataScanner
         public void AddSingle (String fileType, String path)
         {
             if (!stor.datein.ContainsKey(fileType))
-                stor.datein.Add(fileType, new Dictionary<int, string>());
+                stor.datein.TryAdd(fileType, new ConcurrentDictionary<int, string>());
 
-            stor.datein[fileType].Add(stor.datein[fileType].Count + 1, path);
+            stor.datein[fileType].TryAdd(stor.datein[fileType].Count + 1, path);
         }
 
         //increse the given stat by the given number
@@ -44,16 +44,14 @@ namespace AdvancedDataScanner
         //initalize data structure to be ready
         public void InitStruct ()
         {
-            stor.datein = new Dictionary<String, Dictionary<int, String>>();
-            stor.stats = new Dictionary<String, Int64>
-            {
-                { "FolderCount", 0 },
-                { "FileCount", 0 },
-                { "FileError", 0 },
-                { "FolderError", 0 },
-                { "FileSize", 0 },
-                { "CleanFolders", 0 }
-            };
+            stor.datein = new ConcurrentDictionary<String, ConcurrentDictionary<int, String>>();
+            stor.stats = new ConcurrentDictionary<String, Int64>();
+            stor.stats.TryAdd("FolderCount", 0);
+            stor.stats.TryAdd("FileCount", 0);
+            stor.stats.TryAdd("FileError", 0);
+            stor.stats.TryAdd("FolderError", 0);
+            stor.stats.TryAdd("FileSize", 0);
+            stor.stats.TryAdd("CleanFolders", 0);
         }
     }
 
