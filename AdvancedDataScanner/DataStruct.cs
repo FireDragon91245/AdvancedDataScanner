@@ -9,9 +9,6 @@ namespace AdvancedDataScanner
         public ConcurrentDictionary<String, ConcurrentDictionary<int, String>> datein;
 
         public ConcurrentDictionary<String, Int64> stats;
-
-        public DateTime start;
-        public DateTime end;
     }
 
     //tools for the scanner to store data
@@ -61,5 +58,7 @@ namespace AdvancedDataScanner
         public String Type;
         public String StartPath;
         public String Status;
+        public DateTime start;
+        public DateTime end;
     }
 }

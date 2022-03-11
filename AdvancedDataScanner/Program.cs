@@ -227,9 +227,9 @@ namespace AdvancedDataScanner
                                 Console.WriteLine("MB!", Console.ForegroundColor = ConsoleColor.DarkRed);
                             }
                             Console.WriteLine("=====", Console.ForegroundColor = ConsoleColor.Red);
-                            Console.WriteLine(datas[selID].stor.start.ToString(), Console.ForegroundColor = ConsoleColor.Cyan);
-                            Console.WriteLine(datas[selID].stor.end.ToString(), Console.ForegroundColor = ConsoleColor.Cyan);
-                            Console.WriteLine(datas[selID].stor.end.Subtract(datas[selID].stor.start).ToString(), Console.ForegroundColor = ConsoleColor.DarkYellow);
+                            Console.WriteLine(names[selID].start.ToString(), Console.ForegroundColor = ConsoleColor.Cyan);
+                            Console.WriteLine(names[selID].end.ToString(), Console.ForegroundColor = ConsoleColor.Cyan);
+                            Console.WriteLine(names[selID].end.Subtract(names[selID].start).ToString(), Console.ForegroundColor = ConsoleColor.DarkYellow);
                             Console.WriteLine("=====", Console.ForegroundColor = ConsoleColor.Red);
                             Console.WriteLine("-} Not Acountet Files: " + fails);
                             Console.ForegroundColor = ConsoleColor.Gray;
@@ -304,6 +304,10 @@ namespace AdvancedDataScanner
                     "save [ScannID] normal => Saves a good amount of informattion to a file in the program direktori (like the 'get' command)",
                     "save [ScannID] advanced => Saves nomral + every file path categorised in file extensions and nummberd + all avaidable file types",
                     "save [ScannID] all => Saves absoulute anything the 'type [ScannID] [FileType] [FileID]' command run for every scanned file + advanced + normal",
+                    "diskSave [ScannID] [FileTag] => saves a scann result to a computer readable file to load the sann in the future",
+                    "diskLoad [FileTag] => loads a saved scann to the scann list, works like a fresh scann",
+                    "diskList => Lists all saved scanns with [FileTag] and scann Property like normal 'list' command",
+                    "diskDelete [FileTag] => delets a saved scann from your drive",
                     "== help ==",
                     "[FolderPath] => the path to a folder from the windows explorer",
                     "[ScannID] => the id of a scan see in command {list} and will display if a scann finishes",
@@ -311,6 +315,7 @@ namespace AdvancedDataScanner
                     "[FileID] => id of a file in a file type category see command {type [ScannID] [FileType]} infront of the '=>'",
                     "[Name] => the name of the scann, use it as a reminder that you know for what the scann is (NO SPACES ALLOWED)",
                     "[argument] => a argument thats required by the previous construktor {search [ScannID] [name|type] [argument]} = string, {search [ScannID] [minSize,maxSize] [argument]} = number",
+                    "[FileTag] => a string at the beginning of the file name works as namegiver for all 'disk' commands",
                     "== help =="
                 };
                 foreach (String s in help)
@@ -378,8 +383,8 @@ namespace AdvancedDataScanner
                             {
                                 datas[lastID].AddStat(key, datas[lastID].stor.stats[key]);
                             }
-                            datas[lastID].stor.start = datas[scannID].stor.start;
-                            datas[lastID].stor.end = datas[scannID].stor.end;
+                            names[lastID].start = names[scannID].start;
+                            names[lastID].end = names[scannID].end;
                             names[lastID].Name = names[scannID].Name + " - Copy";
                             names[lastID].StartPath = names[scannID].StartPath;
                             names[lastID].Type = names[scannID].Type;
@@ -444,12 +449,11 @@ namespace AdvancedDataScanner
                     }
                 }
             }
-            else if (arg.StartsWith("store"))
+            else if (arg.StartsWith("diskSave"))
             {
                 string[] args = arg.Split(" ");
                 if (args.Length >= 3)
                 {
-
                     if (int.TryParse(args[1], out int scannID))
                     {
                         if (args[2].Length > 0)
@@ -460,8 +464,58 @@ namespace AdvancedDataScanner
                     }
                 }
             }
-            else if (arg.StartsWith("listStore"))
+            else if (arg.StartsWith("diskList"))
             {
+                if (!Directory.Exists("./stor"))
+                    Directory.CreateDirectory("./stor");
+                string[] files = Directory.GetFiles("./stor/").Where(f => f.Contains("name.json")).ToArray();
+                Console.WriteLine("=== Found Save Files For The Following Scanns ===");
+                foreach (string file in files)
+                {
+                    try
+                    {
+                        Names name = JsonConvert.DeserializeObject<Names>(File.ReadAllText(file));
+                        Console.WriteLine($"-> FileID:'{new FileInfo(file).Name.Replace("_name.json", "")}' Scannpropertys -> {name.Name}, {name.Type}, {name.StartPath}, {name.Status}, Savedate {new FileInfo(file).CreationTime}");
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("-> error");
+                    }
+                }
+                Console.WriteLine("=== -- ===");
+            }
+            else if (arg.StartsWith("diskLoad"))
+            {
+                string[] args = arg.Split(" ");
+                if (args.Length >= 2)
+                {
+                    if (args[1].Length > 0)
+                    {
+                        lastID++;
+                        datas.TryAdd(lastID, new DataStruct());
+                        datas[lastID].InitStruct();
+                        names.TryAdd(lastID, new Names());
+                        Console.WriteLine($"Startet to load from JSON to scannID: {lastID}!");
+                        ThreadPool.QueueUserWorkItem(cal => save.LoadFromFiles(lastID, args[1]));
+                    }
+                }
+            }
+            else if (arg.StartsWith("diskDelete"))
+            {
+                string[] args = arg.Split(" ");
+                if (args.Length >= 2)
+                {
+                    if (args[1].Length > 0)
+                    {
+                        if (File.Exists($"./stor/{args[1]}_data.json"))
+                            File.Delete($"./stor/{args[1]}_data.json");
+                        if (File.Exists($"./stor/{args[1]}_name.json"))
+                            File.Delete($"./stor/{args[1]}_name.json");
+                        if (File.Exists($"./stor/{args[1]}_stat.json"))
+                            File.Delete($"./stor/{args[1]}_stat.json");
+                        Console.WriteLine($"Deletet all files with tag {args[1]}");
+                    }
+                }
             }
         }
     }

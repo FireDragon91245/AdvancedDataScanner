@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,9 +19,9 @@ namespace AdvancedDataScanner
                 writer.WriteLine("--Scann output Minimal--");
                 writer.WriteLine("");
                 writer.WriteLine("--General Scann Time--");
-                writer.WriteLine("Scann Start Date: " + Program.datas[scannID].stor.start);
-                writer.WriteLine("Scann End Date: " + Program.datas[scannID].stor.end);
-                writer.WriteLine("-} Scann Time: " + Program.datas[scannID].stor.end.Subtract(Program.datas[scannID].stor.start));
+                writer.WriteLine("Scann Start Date: " + Program.names[scannID].start);
+                writer.WriteLine("Scann End Date: " + Program.names[scannID].end);
+                writer.WriteLine("-} Scann Time: " + Program.names[scannID].end.Subtract(Program.names[scannID].start));
                 writer.WriteLine("");
                 writer.WriteLine("--General Scann Information--");
                 writer.WriteLine("Scann " + Program.names[scannID].Type);
@@ -85,9 +86,9 @@ namespace AdvancedDataScanner
                     writer.WriteLine("Found " + Program.datas[scannID].stor.datein[key].Values.ToArray().Length + " " + key + " Files with a Size of " + ( size / 1048576 ) + " MB!");
                 }
                 writer.WriteLine("=====");
-                writer.WriteLine("Scann Start:" + Program.datas[scannID].stor.start.ToString());
-                writer.WriteLine("Scann End: " + Program.datas[scannID].stor.end.ToString());
-                writer.WriteLine("Total Scann Time: " + Program.datas[scannID].stor.end.Subtract(Program.datas[scannID].stor.start).ToString());
+                writer.WriteLine("Scann Start:" + Program.names[scannID].start.ToString());
+                writer.WriteLine("Scann End: " + Program.names[scannID].end.ToString());
+                writer.WriteLine("Total Scann Time: " + Program.names[scannID].end.Subtract(Program.names[scannID].start).ToString());
                 writer.WriteLine("=====");
                 writer.WriteLine("-} Not Acountet Files: " + fails);
             }
@@ -140,9 +141,9 @@ namespace AdvancedDataScanner
                     writer.WriteLine("Found " + Program.datas[scannID].stor.datein[key].Values.ToArray().Length + " " + key + " Files with a Size of " + ( size / 1048576 ) + " MB!");
                 }
                 writer.WriteLine("=====");
-                writer.WriteLine("Scann Start:" + Program.datas[scannID].stor.start.ToString());
-                writer.WriteLine("Scann End: " + Program.datas[scannID].stor.end.ToString());
-                writer.WriteLine("Total Scann Time: " + Program.datas[scannID].stor.end.Subtract(Program.datas[scannID].stor.start).ToString());
+                writer.WriteLine("Scann Start:" + Program.names[scannID].start.ToString());
+                writer.WriteLine("Scann End: " + Program.names[scannID].end.ToString());
+                writer.WriteLine("Total Scann Time: " + Program.names[scannID].end.Subtract(Program.names[scannID].start).ToString());
                 writer.WriteLine("=====");
                 writer.WriteLine("-} Not Acountet Files: " + fails);
                 writer.WriteLine("");
@@ -213,9 +214,9 @@ namespace AdvancedDataScanner
                     writer.WriteLine("Found " + Program.datas[scannID].stor.datein[key].Values.ToArray().Length + " " + key + " Files with a Size of " + ( size / 1048576 ) + " MB!");
                 }
                 writer.WriteLine("=====");
-                writer.WriteLine("Scann Start:" + Program.datas[scannID].stor.start.ToString());
-                writer.WriteLine("Scann End: " + Program.datas[scannID].stor.end.ToString());
-                writer.WriteLine("Total Scann Time: " + Program.datas[scannID].stor.end.Subtract(Program.datas[scannID].stor.start).ToString());
+                writer.WriteLine("Scann Start:" + Program.names[scannID].start.ToString());
+                writer.WriteLine("Scann End: " + Program.names[scannID].end.ToString());
+                writer.WriteLine("Total Scann Time: " + Program.names[scannID].end.Subtract(Program.names[scannID].start).ToString());
                 writer.WriteLine("=====");
                 writer.WriteLine("-} Not Acountet Files: " + fails);
                 writer.WriteLine("");
@@ -276,10 +277,20 @@ namespace AdvancedDataScanner
             {
                 Directory.CreateDirectory("./stor");
             }
-            string FilePathData = $"./stor/{fileName.Replace(" ", "-").Replace(".", "_")}_{DateTime.Now.ToString().Replace(".", "-").Replace(" ", "-").Replace(":", "-")}_data.json";
-            string FilePathStat = $"./stor/{fileName.Replace(" ", "-").Replace(".", "_")}_{DateTime.Now.ToString().Replace(".", "-").Replace(" ", "-").Replace(":", "-")}_stat.json";
-            File.WriteAllText(FilePathData, "");
-            File.WriteAllText(FilePathStat, "");
+            string FilePathData = $"./stor/{fileName}_data.json";
+            string FilePathStat = $"./stor/{fileName}_stat.json";
+            string FilePathNames = $"./stor/{fileName}_name.json";
+            try
+            {
+                File.WriteAllText(FilePathData, "");
+                File.WriteAllText(FilePathStat, "");
+                File.WriteAllText(FilePathNames, "");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Filename isnt valid or the file is dupplicate");
+                return;
+            }
             using (StreamWriter writer = new StreamWriter(FilePathData))
             {
                 writer.Write(JsonConvert.SerializeObject(Program.datas[scannID].stor.datein, Formatting.Indented));
@@ -288,7 +299,38 @@ namespace AdvancedDataScanner
             {
                 writer.Write(JsonConvert.SerializeObject(Program.datas[scannID].stor.stats, Formatting.Indented));
             }
+            using (StreamWriter writer = new StreamWriter(FilePathNames))
+            {
+                writer.Write(JsonConvert.SerializeObject(Program.names[scannID], Formatting.Indented));
+            }
             Console.WriteLine($"Finished saveing to JSON for id {scannID}.");
+        }
+
+        public void LoadFromFiles (int scannID, string fileName)
+        {
+            if (Directory.Exists("./stor"))
+            {
+                Console.WriteLine("1");
+                if (File.Exists($"./stor/{fileName}_data.json") && File.Exists($"./stor/{fileName}_stat.json") && File.Exists($"./stor/{fileName}_name.json"))
+                {
+                    try
+                    {
+                        Console.WriteLine($"{Environment.CurrentDirectory}/stor/{fileName}_stat.json");
+                        Program.datas[scannID].stor.datein = JsonConvert.DeserializeObject<ConcurrentDictionary<String, ConcurrentDictionary<int, String>>>(File.ReadAllText($"./stor/{fileName}_data.json"));
+                        Program.datas[scannID].stor.stats = JsonConvert.DeserializeObject<ConcurrentDictionary<String, Int64>>(File.ReadAllText($"./stor/{fileName}_stat.json"));
+                        Program.names[scannID] = JsonConvert.DeserializeObject<Names>(File.ReadAllText($"./stor/{fileName}_name.json"));
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"The JSON file wasnt in the right format a error acured reading stoped and scann was deletet! {e.Message}");
+                        if (Program.datas.ContainsKey(scannID))
+                            Program.datas.Remove(scannID, out _);
+                        if (Program.names.ContainsKey(scannID))
+                            Program.names.Remove(scannID, out _);
+                    }
+                }
+            }
+            Console.WriteLine($"Finished Loading JSON to scannID: {scannID}!");
         }
     }
 }

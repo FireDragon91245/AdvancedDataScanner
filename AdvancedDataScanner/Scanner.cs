@@ -16,7 +16,7 @@ namespace AdvancedDataScanner
             thisScannID = id;
             startDictionary = dictionary;
             Console.WriteLine("Added scan to Que for startPath: " + startDictionary);
-            Program.datas[thisScannID].stor.start = DateTime.Now;
+            Program.names[thisScannID].start = DateTime.Now;
         }
 
         //begin a scann
@@ -64,7 +64,7 @@ namespace AdvancedDataScanner
 
             Console.WriteLine("Scann with id " + thisScannID + " finsihed scanning");
             Program.names[thisScannID].Status = "Status: Finished";
-            Program.datas[thisScannID].stor.end = DateTime.Now;
+            Program.names[thisScannID].end = DateTime.Now;
             Program.scans.Remove(thisScannID, out _);
         }
 
@@ -108,7 +108,7 @@ namespace AdvancedDataScanner
 
             Console.WriteLine("Scann with id " + thisScannID + " finsihed scanning");
             Program.names[thisScannID].Status = "Status: Finished";
-            Program.datas[thisScannID].stor.end = DateTime.Now;
+            Program.names[thisScannID].end = DateTime.Now;
             Program.scans.Remove(thisScannID, out _);
         }
     }
