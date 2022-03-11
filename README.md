@@ -20,7 +20,10 @@ V1.0.0 Feature Aditions:
 - search      > aply a search to a scann to filter it
 - copy        > copy a scann
 - recount     > recount the files that are collectet by the scann
-- save        > save results of a scann in diferent detail to a text file
+- save        > save results of a scann in diferent detail to a text file (human readable)
 
 V1.0.1 Feature Aditions:
-- Update comming probebly betwen 11.03.22 and 13.03.22
+- diskSave    > save a scann to your loacal drive for later loading (Computer Readable (.json))
+- diskLoad    > load a file from your loacal drive to a scann, works like a normal scann
+- diskList    > displays all scanns that are saved with propertys of thair scanns
+- diskDelete  > delete a saved scann
