@@ -4,3 +4,8 @@ V1.0.1
 - Made Data Structure Thread Safe
 - Added Newtensoft.JSON
 - Added JSON saving to drive
+- Moved Start and Stop time Propertis of a scann from Data to Names
+- Added diskSave command
+- Added diskLoad command
+- Added diskList command
+- Added diskDelete command
