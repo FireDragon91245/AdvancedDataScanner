@@ -7,7 +7,7 @@ The programm runs without crashes or lag, its slower then the windows counter bu
 at maximum is neaded.
 View all commands and a short explaination with "help".
 
-V1.0.0 Functions:
+V1.0.0 Feature Aditions:
 - add         > add a new folder path to scann in
 - addfast     > add a new folder path to scann in but using a faster but les detailed scanner
 - list        > list all scanns
@@ -21,3 +21,6 @@ V1.0.0 Functions:
 - copy        > copy a scann
 - recount     > recount the files that are collectet by the scann
 - save        > save results of a scann in diferent detail to a text file
+
+V1.0.1 Feature Aditions:
+- Update comming probebly betwen 11.03.22 and 13.03.22
