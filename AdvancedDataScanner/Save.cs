@@ -308,26 +308,23 @@ namespace AdvancedDataScanner
 
         public void LoadFromFiles (int scannID, string fileName)
         {
-            if (Directory.Exists("./stor"))
+            if (!Directory.Exists("./stor"))
+                Directory.CreateDirectory("./stor");
+            if (File.Exists($"./stor/{fileName}_data.json") && File.Exists($"./stor/{fileName}_stat.json") && File.Exists($"./stor/{fileName}_name.json"))
             {
-                Console.WriteLine("1");
-                if (File.Exists($"./stor/{fileName}_data.json") && File.Exists($"./stor/{fileName}_stat.json") && File.Exists($"./stor/{fileName}_name.json"))
+                try
                 {
-                    try
-                    {
-                        Console.WriteLine($"{Environment.CurrentDirectory}/stor/{fileName}_stat.json");
-                        Program.datas[scannID].stor.datein = JsonConvert.DeserializeObject<ConcurrentDictionary<String, ConcurrentDictionary<int, String>>>(File.ReadAllText($"./stor/{fileName}_data.json"));
-                        Program.datas[scannID].stor.stats = JsonConvert.DeserializeObject<ConcurrentDictionary<String, Int64>>(File.ReadAllText($"./stor/{fileName}_stat.json"));
-                        Program.names[scannID] = JsonConvert.DeserializeObject<Names>(File.ReadAllText($"./stor/{fileName}_name.json"));
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine($"The JSON file wasnt in the right format a error acured reading stoped and scann was deletet! {e.Message}");
-                        if (Program.datas.ContainsKey(scannID))
-                            Program.datas.Remove(scannID, out _);
-                        if (Program.names.ContainsKey(scannID))
-                            Program.names.Remove(scannID, out _);
-                    }
+                    Program.datas[scannID].stor.datein = JsonConvert.DeserializeObject<ConcurrentDictionary<String, ConcurrentDictionary<int, String>>>(File.ReadAllText($"./stor/{fileName}_data.json"));
+                    Program.datas[scannID].stor.stats = JsonConvert.DeserializeObject<ConcurrentDictionary<String, Int64>>(File.ReadAllText($"./stor/{fileName}_stat.json"));
+                    Program.names[scannID] = JsonConvert.DeserializeObject<Names>(File.ReadAllText($"./stor/{fileName}_name.json"));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"The JSON file wasnt in the right format a error acured reading stoped and scann was deletet! {e.Message}");
+                    if (Program.datas.ContainsKey(scannID))
+                        Program.datas.Remove(scannID, out _);
+                    if (Program.names.ContainsKey(scannID))
+                        Program.names.Remove(scannID, out _);
                 }
             }
             Console.WriteLine($"Finished Loading JSON to scannID: {scannID}!");

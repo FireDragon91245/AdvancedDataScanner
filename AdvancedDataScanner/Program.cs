@@ -502,6 +502,8 @@ namespace AdvancedDataScanner
             }
             else if (arg.StartsWith("diskDelete"))
             {
+                if (!Directory.Exists("./stor"))
+                    Directory.CreateDirectory("./stor");
                 string[] args = arg.Split(" ");
                 if (args.Length >= 2)
                 {
