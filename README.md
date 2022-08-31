@@ -1,3 +1,8 @@
+# (Probably) Discountainued (as of 2022)
+  i have no further intents to update this project as well as the Installer i will probebly remove these repoos soon 
+  but i will (Propeply) create a new repo where i rewrite this programm as libary
+
+
 # AdvancedDataScanner
 Scanner that scanns entire folder trees and colects information about files.
 
